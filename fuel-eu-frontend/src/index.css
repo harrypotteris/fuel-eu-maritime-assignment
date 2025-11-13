@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: smooth font rendering */
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Optional: app-wide background */
+body {
+  @apply bg-background text-foreground;
+}
+
+/* Optional: remove default margin */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
