@@ -1,143 +1,153 @@
-FuelEU Maritime — Full-Stack Developer Assignment
-Backend: Express + Prisma + PostgreSQL
-Frontend: React + TypeScript + Vite + Tailwind
+# 🚢 FuelEU Maritime — Full-Stack Developer Assignment
 
-This full-stack project implements parts of a FuelEU Maritime Compliance Platform, designed to support:
+### **Backend:** Express + Prisma + PostgreSQL  
+### **Frontend:** React + TypeScript + Vite + TailwindCSS  
 
-Maritime route management
+This project implements core components of a **FuelEU Maritime Compliance Platform**, including:
 
-GHG intensity comparisons
+- Maritime Route Management  
+- Baseline & Intensity Comparison  
+- Carbon Balance (CB) Calculations  
+- Banking of Surplus Credits  
+- Pooling with Greedy Allocation  
+- Dashboard Insights  
 
-Compliance calculations (Carbon Balance, thresholds)
+The system follows **clean hexagonal architecture** and demonstrates strong engineering quality and structure.
 
-Banking of surplus credits
+---
 
-Pool creation with greedy allocation
+## 📦 Project Structure
 
-Dashboard insights
+fuel-eu-maritime-assignment/
+│
+├── backend/
+│ ├── prisma/
+│ └── src/
+│
+└── frontend/
+├── public/
+└── src/
 
-The repository demonstrates clean engineering, hexagonal architecture, and use of AI-assisted productivity tools.
+yaml
+Copy code
 
-🚢 1. Project Architecture
-📦 fuel-eu-maritime-assignment
- ├── backend/
- │    ├── prisma/
- │    └── src/
- └── frontend/
-      ├── src/
-      └── public/
+---
 
-🛠 2. Backend Overview (Express + Prisma + PostgreSQL)
-✨ Features
-Routes
+# 🛠️ 1. Backend Overview (Express + Prisma)
 
-Fetch routes with filters (year, vessel type, fuel type)
+## ✨ Features
 
-Set baseline route
+### 🚢 Routes
+- Fetch routes (with filters: year, vessel type, fuel type)
+- Set baseline route
+- Compare all routes of a given year with the baseline
+- Compliance check
 
-Compare yearly routes vs baseline
+### 📉 Compliance
+- Compute GHG intensity  
+- Compute Carbon Balance (CB)  
+- Check if values cross allowed thresholds  
 
-Return compliance status
+### 💰 Banking
+- Add banked surplus credits  
+- View banking history  
+- Apply stored credits to specific years  
 
-Compliance
+### 🤝 Pooling
+- Create pool for a year  
+- Apply greedy allocation algorithm to distribute CB  
+- Store pool results  
 
-GHG intensity calculation
+---
 
-Carbon Balance (CB) computation
+## 📁 Backend Folder Structure
 
-Threshold evaluation
-
-Banking
-
-Bank surplus credits
-
-View banked credit history
-
-Apply credits to years
-
-Pooling
-
-Create pool
-
-Greedy CB allocation
-
-Store pool results
-
-📁 Backend Structure
 backend/
- ├── prisma/
- │    ├── schema.prisma
- │    └── seed.ts
- ├── src/
- │    ├── core/
- │    │    ├── domain/
- │    │    └── application/
- │    ├── adapters/
- │    │    ├── inbound/http/
- │    │    └── outbound/
- │    ├── infra/
- │    ├── server.ts
- │    └── index.ts
- ├── package.json
- └── tsconfig.json
+├── prisma/
+│ ├── schema.prisma
+│ └── seed.ts
+├── src/
+│ ├── core/
+│ │ ├── domain/
+│ │ └── application/
+│ ├── adapters/
+│ │ ├── inbound/http/
+│ │ └── outbound/
+│ ├── infra/
+│ ├── index.ts
+│ └── server.ts
+├── package.json
+└── tsconfig.json
 
-⚙️ Setup
-1. Install
+yaml
+Copy code
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1️⃣ Backend Setup
+
+```bash
 cd backend
 npm install
-
-2. Configure DB
-
-Create backend/.env:
-
+2️⃣ Environment Setup (backend/.env)
+ini
+Copy code
 DATABASE_URL="postgresql://user:password@localhost:5432/fueleu"
-
-3. Prisma setup
+3️⃣ Prisma Migration
+bash
+Copy code
 npx prisma generate
 npx prisma migrate dev
-
-4. Run server
+4️⃣ Start Backend
+bash
+Copy code
 npm run dev
+➡ Backend runs at: http://localhost:3000
 
-
-Backend runs at: http://localhost:3000
-
-📡 API Endpoints
-Routes
+##📡 API Endpoints
+##🛳️ Routes
 Method	Endpoint	Description
 GET	/api/routes	Fetch routes with filters
 POST	/api/routes/:id/baseline	Set baseline route
 GET	/api/routes/comparison	Compare intensities
-Compliance
+
+##📉 Compliance
 Method	Endpoint	Description
-GET	/api/compliance/cb?routeId=R001	Calculate CB
-Banking
+GET	/api/compliance/cb?routeId=R001	Calculate Carbon Balance
+
+##💰 Banking
 Method	Endpoint	Description
-GET	/api/banking/records	Bank history
+GET	/api/banking/records	Get banking history
 POST	/api/banking/bank	Add banked credit
 POST	/api/banking/apply	Use banked credits
-Pooling
+
+##🤝 Pooling
 Method	Endpoint	Description
 POST	/api/pools	Create pool
-🎨 3. Frontend Overview (React + TypeScript + Vite + Tailwind)
-✨ Features
 
+##🎨 2. Frontend Overview (React + Tailwind)
+##✨ Features
 Route list + filter UI
 
-Baseline selection interface
+Baseline selection screen
 
 Intensity comparison charts
 
-CB calculation UI
+Carbon Balance (CB) calculator
 
-Banking pages (add, apply, history)
+Banking: add, apply, history
 
 Pool creation UI + greedy result table
 
-Dashboard analytics
+Dashboard visual analytics
 
-📁 Frontend Structure
+##📁 Frontend Structure
+pgsql
+Copy code
 frontend/
+ ├── public/
  ├── src/
  │    ├── components/
  │    ├── pages/
@@ -146,68 +156,62 @@ frontend/
  │    ├── App.tsx
  │    ├── main.tsx
  │    └── index.css
- ├── public/
- └── package.json
-
-⚙️ Setup
-1. Install
+ ├── package.json
+ └── vite.config.ts
+##⚙️ Frontend Setup
+1️⃣ Install
+bash
+Copy code
 cd frontend
 npm install
-
-2. Configure environment
-
-Create frontend/.env:
-
+2️⃣ Environment Setup (frontend/.env)
+ini
+Copy code
 VITE_API_URL="http://localhost:3000"
-
-3. Run
+3️⃣ Run Frontend
+bash
+Copy code
 npm run dev
+➡ Frontend runs at: http://localhost:5173
 
-
-Frontend runs at: http://localhost:5173
-
-🔗 4. API Integration (Axios)
+##🔗 API Integration (Axios)
+ts
+Copy code
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
-
-📦 5. Build & Deploy
+##🚀 Build & Deployment
 Backend
+bash
+Copy code
 npm run build
 npm start
-
 Frontend
+bash
+Copy code
 npm run build
 npm run preview
-
-
-Host build directory (dist/) on:
-
+Deployment Targets:
 Vercel
 
 Netlify
 
 GitHub Pages
 
+Cloudflare Pages
+
 AWS S3
 
-📊 6. Suggested Enhancements
-
-Add JWT login system
-
-Add admin/user roles
-
-Add proper error boundary components
-
-Add dark/light mode
+##📊 Recommendations & Enhancements
+Add JWT Auth (Admin / User)
 
 Add Swagger API documentation
 
 Add Docker Compose (DB + backend + frontend)
 
-👨‍💻 7. Technologies Used
-Layer	Tech
-Frontend	React, TypeScript, Vite, Tailwind, React Router, Axios
-Backend	Node.js, Express, Prisma, PostgreSQL, Zod
-Infra	Hexagonal Architecture
-Tools	GitHub Copilot, Cursor, Claude, OpenAI
+Add error boundary screens
+
+Add Lighthouse-optimized UX
+
+Add unit + integration tests
+
