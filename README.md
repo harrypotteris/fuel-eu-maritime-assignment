@@ -1,196 +1,213 @@
-# FuelEU Maritime Backend – Express + Prisma – TypeScript
+FuelEU Maritime — Full-Stack Developer Assignment
+Backend: Express + Prisma + PostgreSQL
+Frontend: React + TypeScript + Vite + Tailwind
 
-This backend provides APIs for:
+This full-stack project implements parts of a FuelEU Maritime Compliance Platform, designed to support:
 
-- Maritime routes, baselines, and comparisons
-- GHG compliance calculations (CB, intensity comparisons)
-- Banking (surplus banking, applying banked amounts)
-- Pooling (greedy allocation algorithm)
-- Storage using Prisma + PostgreSQL
+Maritime route management
 
-The project follows a clean hexagonal architecture:
+GHG intensity comparisons
 
+Compliance calculations (Carbon Balance, thresholds)
+
+Banking of surplus credits
+
+Pool creation with greedy allocation
+
+Dashboard insights
+
+The repository demonstrates clean engineering, hexagonal architecture, and use of AI-assisted productivity tools.
+
+🚢 1. Project Architecture
+📦 fuel-eu-maritime-assignment
+ ├── backend/
+ │    ├── prisma/
+ │    └── src/
+ └── frontend/
+      ├── src/
+      └── public/
+
+🛠 2. Backend Overview (Express + Prisma + PostgreSQL)
+✨ Features
+Routes
+
+Fetch routes with filters (year, vessel type, fuel type)
+
+Set baseline route
+
+Compare yearly routes vs baseline
+
+Return compliance status
+
+Compliance
+
+GHG intensity calculation
+
+Carbon Balance (CB) computation
+
+Threshold evaluation
+
+Banking
+
+Bank surplus credits
+
+View banked credit history
+
+Apply credits to years
+
+Pooling
+
+Create pool
+
+Greedy CB allocation
+
+Store pool results
+
+📁 Backend Structure
 backend/
-  prisma/
-  src/
-    core/
-      domain/
-      application/
-    adapters/
-      inbound/http
-      outbound/
-    infra/
+ ├── prisma/
+ │    ├── schema.prisma
+ │    └── seed.ts
+ ├── src/
+ │    ├── core/
+ │    │    ├── domain/
+ │    │    └── application/
+ │    ├── adapters/
+ │    │    ├── inbound/http/
+ │    │    └── outbound/
+ │    ├── infra/
+ │    ├── server.ts
+ │    └── index.ts
+ ├── package.json
+ └── tsconfig.json
 
----
-
-## Features
-
-### 1. Route Management
-- Fetch routes with optional filters (year, vessel type, fuel type)
-- Set baseline route per year
-- Compare all routes of a year with the baseline
-- Determine compliance against a threshold
-
-### 2. Compliance Calculations
-Compute CB (Compliance Balance) for any route using:
-
-```ts
-computeCB(ghgIntensity, fuelConsumption)
-3. Banking System
-
-Ships can:
-
-Bank surplus compliance
-
-View banked records
-
-Apply banked credits
-
-4. Pooling System
-
-Create pools for a given year
-
-Distribute CB using allocatePoolGreedy()
-
-Save pool and member results to the database
-
-Installation
-1. Clone the repository
-git clone <your-repo-url> backend
+⚙️ Setup
+1. Install
 cd backend
-
-2. Install dependencies
 npm install
 
-3. Setup environment variables
+2. Configure DB
 
-Create a .env file in the root:
+Create backend/.env:
 
-DATABASE_URL="postgresql://user:password@localhost:5432/yourdb"
+DATABASE_URL="postgresql://user:password@localhost:5432/fueleu"
 
-4. Prisma setup
+3. Prisma setup
 npx prisma generate
 npx prisma migrate dev
 
-5. Run the development server
+4. Run server
 npm run dev
 
-API Endpoints
+
+Backend runs at: http://localhost:3000
+
+📡 API Endpoints
 Routes
-GET /api/routes
-
-Optional query parameters:
-
-/api/routes?year=2024&vesselType=Tanker&fuelType=LNG
-
-
-Returns all routes matching filters.
-
-POST /api/routes/:routeId/baseline
-
-Sets the specified route as the baseline for its year.
-
-GET /api/routes/comparison
-
-Generates baseline-vs-other route comparisons:
-
-baseline intensity
-
-other route intensity
-
-percent difference
-
-compliance status (<= 89.3368)
-
+Method	Endpoint	Description
+GET	/api/routes	Fetch routes with filters
+POST	/api/routes/:id/baseline	Set baseline route
+GET	/api/routes/comparison	Compare intensities
 Compliance
-GET /api/compliance/cb?routeId=R001
-
-Returns:
-
-{ "cb": number }
-
-
-Computed using:
-
-computeCB(ghgIntensity, fuelConsumption)
-
+Method	Endpoint	Description
+GET	/api/compliance/cb?routeId=R001	Calculate CB
 Banking
-GET /api/banking/records?shipId=SHIP1&year=2025
-
-Fetch banking history for a ship.
-
-POST /api/banking/bank
-
-Body:
-
-{
-  "shipId": "SHIP1",
-  "year": 2025,
-  "amount": 12.4
-}
-
-POST /api/banking/apply
-
-Body:
-
-{
-  "shipId": "SHIP1",
-  "year": 2025,
-  "amount": 5
-}
-
+Method	Endpoint	Description
+GET	/api/banking/records	Bank history
+POST	/api/banking/bank	Add banked credit
+POST	/api/banking/apply	Use banked credits
 Pooling
-POST /api/pools
+Method	Endpoint	Description
+POST	/api/pools	Create pool
+🎨 3. Frontend Overview (React + TypeScript + Vite + Tailwind)
+✨ Features
 
-Body:
+Route list + filter UI
 
-{
-  "year": 2025,
-  "members": [
-    { "shipId": "A", "cbBefore": 5 },
-    { "shipId": "B", "cbBefore": -3 }
-  ]
-}
+Baseline selection interface
+
+Intensity comparison charts
+
+CB calculation UI
+
+Banking pages (add, apply, history)
+
+Pool creation UI + greedy result table
+
+Dashboard analytics
+
+📁 Frontend Structure
+frontend/
+ ├── src/
+ │    ├── components/
+ │    ├── pages/
+ │    ├── hooks/
+ │    ├── services/
+ │    ├── App.tsx
+ │    ├── main.tsx
+ │    └── index.css
+ ├── public/
+ └── package.json
+
+⚙️ Setup
+1. Install
+cd frontend
+npm install
+
+2. Configure environment
+
+Create frontend/.env:
+
+VITE_API_URL="http://localhost:3000"
+
+3. Run
+npm run dev
 
 
-Uses:
+Frontend runs at: http://localhost:5173
 
-allocatePoolGreedy()
+🔗 4. API Integration (Axios)
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
 
-Saves pool + poolMember entries to DB
-
-Project Structure
-backend/
-│
-├── prisma/
-│   ├── schema.prisma
-│   └── seed.ts
-│
-├── src/
-│   ├── core/
-│   │   ├── domain/           # Entity types, interfaces
-│   │   └── application/      # computeCB, banking, pooling, etc.
-│   │
-│   ├── adapters/
-│   │   ├── inbound/http      # Express route handlers
-│   │   └── outbound/         # Prisma client
-│   │
-│   ├── infra/                # Server, config, middleware
-│   ├── server.ts
-│   └── index.ts
-│
-└── package.json
-
-Testing (Optional)
-
-Install Jest:
-
-npm install --save-dev jest ts-jest @types/jest
-npx ts-jest config:init
-
-Build & Deploy
-Build
+📦 5. Build & Deploy
+Backend
 npm run build
-
-Start production server
 npm start
+
+Frontend
+npm run build
+npm run preview
+
+
+Host build directory (dist/) on:
+
+Vercel
+
+Netlify
+
+GitHub Pages
+
+AWS S3
+
+📊 6. Suggested Enhancements
+
+Add JWT login system
+
+Add admin/user roles
+
+Add proper error boundary components
+
+Add dark/light mode
+
+Add Swagger API documentation
+
+Add Docker Compose (DB + backend + frontend)
+
+👨‍💻 7. Technologies Used
+Layer	Tech
+Frontend	React, TypeScript, Vite, Tailwind, React Router, Axios
+Backend	Node.js, Express, Prisma, PostgreSQL, Zod
+Infra	Hexagonal Architecture
+Tools	GitHub Copilot, Cursor, Claude, OpenAI
